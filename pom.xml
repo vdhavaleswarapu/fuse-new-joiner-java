@@ -32,6 +32,8 @@
 			**/Tracer.java,
 			**/Application.java
 		</sonar.coverage.exclusions>
+		<sonar.organization>galatea-associates</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<!-- Allow us to skip Unit Tests only, if need be, with -Dskip.surefire.tests, but retain the skip all tests functionality of -DskipTests -->
 		<skip.surefire.tests>${skipTests}</skip.surefire.tests>
 	</properties>
@@ -144,7 +146,7 @@
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
-			<version>3.5.1</version>
+			<version>3.16.1</version>
 		</dependency>
 
 		<dependency>
@@ -180,7 +182,7 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.9.10.3</version>
+			<version>2.9.10.8</version>
 		</dependency>
 
 		<!-- JAXB - converting between POJOs and XML -->
