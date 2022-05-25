@@ -1,6 +1,7 @@
 package org.galatea.starter.service;
 
 import java.util.List;
+import org.galatea.starter.domain.IexHistoricalPrice;
 import org.galatea.starter.domain.IexLastTradedPrice;
 import org.galatea.starter.domain.IexSymbol;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * A Feign Declarative REST Client to access endpoints from the Free and Open IEX API to get market
  * data. See https://iextrading.com/developer/docs/
  */
-@FeignClient(name = "IEX", url = "${spring.rest.iexBasePath}")
+@FeignClient(name = "IEX", url = "https://cloud.iexapis.com/stable")
 public interface IexClient {
 
   /**
@@ -30,6 +31,9 @@ public interface IexClient {
    * @return a list of the last traded price for each of the symbols passed in.
    */
   @GetMapping("/tops/last")
-  List<IexLastTradedPrice> getLastTradedPriceForSymbols(@RequestParam("symbols") String[] symbols);
+  List<IexLastTradedPrice> getLastTradedPriceForSymbols(@RequestParam("symbols") String symbols);
+
+  @GetMapping("/stock/{symbols}/chart/date/{date}")
+  List<IexHistoricalPrice> getHistoricalPrice(@RequestParam("symbols") String symbols, @RequestParam("date") String date);
 
 }
