@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * A Feign Declarative REST Client to access endpoints from the Free and Open IEX API to get market
  * data. See https://iextrading.com/developer/docs/
  */
-@FeignClient(name = "IEX", url = "https://cloud.iexapis.com/stable")
+@FeignClient(name = "IEX", url = "${spring.rest.iexBasePath}")
 public interface IexClient {
 
   /**
@@ -21,7 +21,7 @@ public interface IexClient {
    *
    * @return a list of all of the stock symbols supported by IEX.
    */
-  @GetMapping("/ref-data/symbols")
+  @GetMapping("/ref-data/symbols?token=pk_4e957a4821324131ae5619df8c683985")
   List<IexSymbol> getAllSymbols();
 
   /**
@@ -30,10 +30,10 @@ public interface IexClient {
    * @param symbols stock symbols to get last traded price for.
    * @return a list of the last traded price for each of the symbols passed in.
    */
-  @GetMapping("/tops/last")
-  List<IexLastTradedPrice> getLastTradedPriceForSymbols(@RequestParam("symbols") String symbols);
+  @GetMapping("/tops/last?token=pk_4e957a4821324131ae5619df8c683985")
+  List<IexLastTradedPrice> getLastTradedPriceForSymbols(@RequestParam("symbols") String[] symbols);
 
-  @GetMapping("/stock/{symbols}/chart/date/{date}")
-  List<IexHistoricalPrice> getHistoricalPrice(@RequestParam("symbols") String symbols, @RequestParam("date") String date);
+  @GetMapping("/stock/{symbols}/chart/date/{date}?token=pk_4e957a4821324131ae5619df8c683985")
+  List<IexHistoricalPrice> getHistoricalPrice(@RequestParam("symbols") String[] symbols, @RequestParam("date") String[] date);
 
 }
