@@ -81,4 +81,36 @@ public class IexRestControllerTest extends ASpringTest {
         .andExpect(jsonPath("$", is(Collections.emptyList())))
         .andReturn();
   }
+
+  @Test
+  public void testGetHistoricalPrice() throws Exception {
+
+    MvcResult result = this.mvc.perform(
+            org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+                .get("/iex/historicalPrice?symbols=FB&tp=20220502")
+                // This URL will be hit by the MockMvc client. The result is configured in the file
+                // src/test/resources/wiremock/mappings/mapping-lastTradedPrice.json
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$[0].close").value(new BigDecimal("211.13")))
+        .andExpect(jsonPath("$[0].high").value(new BigDecimal("211.88")))
+        .andExpect(jsonPath("$[0].low").value(new BigDecimal("200.99")))
+        .andExpect(jsonPath("$[0].open").value(new BigDecimal("201.165")))
+        .andExpect(jsonPath("$[0].symbol", is("FB")))
+        .andExpect(jsonPath("$[0].volume").value(new BigDecimal("49915289")))
+        .andExpect(jsonPath("$[0].date", is("2022-05-02")))
+        .andReturn();
+  }
+
+  @Test
+  public void testHistoricalPriceEmpty() throws Exception {
+
+    MvcResult result = this.mvc.perform(
+            org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+                .get("/iex/historicalPrice?symbols=FB&tp=")
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$", is(Collections.emptyList())))
+        .andReturn();
+  }
 }

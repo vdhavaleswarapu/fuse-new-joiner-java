@@ -49,7 +49,7 @@ public class IexService {
     /*
 
      */
-    if(false) {
+    if(CollectionUtils.isEmpty(symbols) || CollectionUtils.isEmpty(tp)) {
       return Collections.emptyList();
     } else {
       return iexClient.getHistoricalPrice(symbols.toArray(new String[0]), tp.toArray(new String[0]));
