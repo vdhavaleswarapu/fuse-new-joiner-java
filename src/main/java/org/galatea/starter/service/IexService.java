@@ -45,11 +45,17 @@ public class IexService {
       return iexClient.getLastTradedPriceForSymbols(symbols.toArray(new String[0]));
     }
   }
-  public List<IexHistoricalPrice> getHistoricalPrice(final List<String> symbols, final List<String> date){
-    if(CollectionUtils.isEmpty(symbols) || CollectionUtils.isEmpty(date)) {
+  public List<IexHistoricalPrice> getHistoricalPrice(){
+    /*
+
+     */
+    if(false) {
       return Collections.emptyList();
     } else {
-      return iexClient.getHistoricalPrice(symbols.toArray(new String[0]), date.toArray(new String[0]));
+      return iexClient.getHistoricalPrice();
+      /*
+
+       */
     }
   }
 

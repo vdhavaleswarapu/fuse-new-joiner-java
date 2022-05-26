@@ -6,7 +6,11 @@ import org.galatea.starter.domain.IexLastTradedPrice;
 import org.galatea.starter.domain.IexSymbol;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * A Feign Declarative REST Client to access endpoints from the Free and Open IEX API to get market
@@ -33,7 +37,10 @@ public interface IexClient {
   @GetMapping("/tops/last?token=pk_4e957a4821324131ae5619df8c683985")
   List<IexLastTradedPrice> getLastTradedPriceForSymbols(@RequestParam("symbols") String[] symbols);
 
-  @GetMapping("/stock/{symbols}/chart/date/{date}?token=pk_4e957a4821324131ae5619df8c683985")
-  List<IexHistoricalPrice> getHistoricalPrice(@RequestParam("symbols") String[] symbols, @RequestParam("date") String[] date);
+  @GetMapping("/stock/fb/chart/date/20220512?token=pk_4e957a4821324131ae5619df8c683985&chartByDay=true")
+  List<IexHistoricalPrice> getHistoricalPrice();
 
+  /*
+  @PathVariable("symbols") String[] symbols, @PathVariable("date") String[] date
+   */
 }
