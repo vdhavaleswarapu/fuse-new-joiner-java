@@ -28,17 +28,17 @@ public class SettlementMission {
   @GeneratedValue(strategy = GenerationType.AUTO)
   protected Long id;
 
-  @NonNull
+//  @NonNull
   protected String instrument;
 
   @NonNull
   protected String externalParty;
 
-  @NonNull
+//  @NonNull
   protected String depot;
 
   @StringEnumeration(enumClass = Direction.class, message = "Direction must be valid")
-  @NonNull
+//  @NonNull
   protected String direction;
 
   @DecimalMin(value = "0.0", inclusive = false, message = "Quantity must be greater than 0")
