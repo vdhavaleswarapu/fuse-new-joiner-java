@@ -25,7 +25,7 @@ public interface IexClient {
    *
    * @return a list of all of the stock symbols supported by IEX.
    */
-  @GetMapping("/ref-data/symbols?token=pk_4e957a4821324131ae5619df8c683985")
+  @GetMapping("/ref-data/symbols?token=pk_4e957a4821324131ae5619df8c683985") //hardcoded private token to the mappings
   List<IexSymbol> getAllSymbols();
 
   /**
