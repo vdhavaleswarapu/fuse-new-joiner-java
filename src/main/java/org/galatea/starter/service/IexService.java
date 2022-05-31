@@ -2,12 +2,15 @@ package org.galatea.starter.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.IexHistoricalPrice;
 import org.galatea.starter.domain.IexLastTradedPrice;
 import org.galatea.starter.domain.IexSymbol;
+import org.galatea.starter.domain.histData;
+import org.galatea.starter.domain.histDataRepo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -48,10 +51,13 @@ public class IexService {
   public List<IexHistoricalPrice> getHistoricalPrice(final String symbols, final String tp){
 
     //add DB logic here to check if data exists in the DB and return it here as appropriate
+//    if(srch.size()==1) return (List<IexHistoricalPrice>)srch;
     if(symbols.isEmpty() || tp.isEmpty()) {
       return Collections.emptyList();
     } else {
-      return iexClient.getHistoricalPrice(symbols, tp);
+      var response = iexClient.getHistoricalPrice(symbols, tp);
+//      histDataRepo.save(response);
+      return response;
     }
   }
 

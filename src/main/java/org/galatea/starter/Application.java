@@ -49,12 +49,9 @@ public class Application implements ApplicationRunner {
     return (args) -> {
       repository.save(new histData("FB","2022-05-02" , 211.13, 211.18, 200.99, 201.165, 49915289));
       System.out.println("written to DB");
-      repository.findBySymbol("FB").forEach(i-> repository.findByDate("2022-05-02").forEach(j-> log.info(j.toString())));
+//      repository.findBySymbol("FB").forEach(i-> repository.findByDate("2022-05-02").forEach(j-> log.info(j.toString())));
 //      };
     };
-//    else{
-//      //do something
-//    }
   };
 
   /**
