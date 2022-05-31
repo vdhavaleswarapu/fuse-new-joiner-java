@@ -8,12 +8,13 @@ import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
 import org.galatea.starter.domain.IexLastTradedPrice;
 import org.galatea.starter.domain.IexSymbol;
+import org.galatea.starter.domain.histDataRepo;
 import org.galatea.starter.service.IexService;
 import org.galatea.starter.domain.IexHistoricalPrice;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,7 +27,7 @@ public class IexRestController {
 
   @NonNull
   private IexService iexService;
-
+  
   /**
    * Exposes an endpoint to get all of the symbols available on IEX.
    *
@@ -50,12 +51,28 @@ public class IexRestController {
     return iexService.getLastTradedPriceForSymbols(symbols);
   }
 
+  @Autowired
+  histDataRepo repo;
   @GetMapping(value = "${mvc.iex.getHistoricalPricePath}", produces = {MediaType.APPLICATION_JSON_VALUE})
-  public List<IexHistoricalPrice> getHistoricalPrice(@RequestParam(value="symbols") final List<String> symbols, @RequestParam(value = "tp") final List<String> tp
+  public List<IexHistoricalPrice> getHistoricalPrice(@RequestParam(value="symbols") final String symbols, @RequestParam(value = "tp") final String tp
       ){
-    /*
-    @RequestParam(value="symbols") final List<String> symbols, @RequestParam(value = "date") final List<String> date
-     */
-    return iexService.getHistoricalPrice(symbols,tp);
+//     Querying the in-memory H2 DB to find if the data exists locally and returning it without making a call to the IEX API
+//    if(!repo.findBySymbol(symbols).isEmpty()){
+//      if(!repo.findByDate(tp).isEmpty()){
+//        return repo.findBySymbol(symbols); // return what's needed
+//      }
+//    }
+    // Data not available locally. Pulling it from cloud.iex by calling the IEX API and simultaneously writing it to the DB.
+    List<IexHistoricalPrice> response = iexService.getHistoricalPrice(symbols,tp);
+
+
+    for (int i=0; i<response.size(); i++){
+      IexHistoricalPrice row = response.get(i);
+      System.out.println("Element "+i+ row);
+    }
+    System.out.println("Pushing data to DB");
+    // Add DB write logic
+    System.out.println("Data successfully added to DB");
+    return response;
   }
 }

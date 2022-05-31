@@ -45,17 +45,13 @@ public class IexService {
       return iexClient.getLastTradedPriceForSymbols(symbols.toArray(new String[0]));
     }
   }
-  public List<IexHistoricalPrice> getHistoricalPrice(final List<String> symbols, final List<String> tp){
-    /*
+  public List<IexHistoricalPrice> getHistoricalPrice(final String symbols, final String tp){
 
-     */
-    if(CollectionUtils.isEmpty(symbols) || CollectionUtils.isEmpty(tp)) {
+    //add DB logic here to check if data exists in the DB and return it here as appropriate
+    if(symbols.isEmpty() || tp.isEmpty()) {
       return Collections.emptyList();
     } else {
-      return iexClient.getHistoricalPrice(symbols.toArray(new String[0]), tp.toArray(new String[0]));
-      /*
-
-       */
+      return iexClient.getHistoricalPrice(symbols, tp);
     }
   }
 
