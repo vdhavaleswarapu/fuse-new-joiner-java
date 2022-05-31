@@ -56,7 +56,7 @@ public class IexService {
       return Collections.emptyList();
     } else {
       var response = iexClient.getHistoricalPrice(symbols, tp);
-//      histDataRepo.save(response);
+      histDataRepo.save(response); //check why non-static
       return response;
     }
   }
