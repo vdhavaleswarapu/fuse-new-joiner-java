@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 @Slf4j
 @SpringBootApplication
-@EntityScan("org.galatea.starter.domain.histData")
+//@EntityScan("org.galatea.starter.domain.histData")
 public class Application implements ApplicationRunner {
 
   /**

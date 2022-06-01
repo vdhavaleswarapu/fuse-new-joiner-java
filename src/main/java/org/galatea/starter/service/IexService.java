@@ -50,17 +50,18 @@ public class IexService {
       return iexClient.getLastTradedPriceForSymbols(symbols.toArray(new String[0]));
     }
   }
-  public Object getHistoricalPrice(final String symbols, final String tp, histDataRepo repo){
+  public List<IexHistoricalPrice> getHistoricalPrice(final String symbols, final String tp, histDataRepo repo){
     if(symbols.isEmpty() || tp.isEmpty()) {
       return Collections.emptyList();
     }
+    List<IexHistoricalPrice> dummy = new ArrayList<>();
     List<histData> result = new ArrayList<>();
     repo.findBySymbol(symbols).forEach(i-> repo.findByDate(tp).forEach(j-> result.add(j)));
     System.out.println(result);
 
     if(!result.isEmpty()){
       System.out.println("Data available locally ... ");
-      return result;
+      return dummy;
     }
     else {
       System.out.println("Data not available locally. Querying the IEX API for data ...");

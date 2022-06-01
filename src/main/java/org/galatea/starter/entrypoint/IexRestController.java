@@ -54,10 +54,10 @@ public class IexRestController {
   @Autowired
   histDataRepo repo;
   @GetMapping(value = "${mvc.iex.getHistoricalPricePath}", produces = {MediaType.APPLICATION_JSON_VALUE})
-  public Object getHistoricalPrice(@RequestParam(value="symbols") final String symbols, @RequestParam(value = "tp") final String tp
+  public List<IexHistoricalPrice> getHistoricalPrice(@RequestParam(value="symbols") final String symbols, @RequestParam(value = "tp") final String tp
       ){
     // Data not available locally. Pulling it from cloud.iex by calling the IEX API and simultaneously writing it to the DB.
-    Object response = iexService.getHistoricalPrice(symbols,tp, repo);
+    List<IexHistoricalPrice> response = iexService.getHistoricalPrice(symbols,tp, repo);
     return response;
   }
 }
