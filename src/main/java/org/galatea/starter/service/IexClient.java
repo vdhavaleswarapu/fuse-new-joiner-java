@@ -40,6 +40,6 @@ public interface IexClient {
   List<IexLastTradedPrice> getLastTradedPriceForSymbols(@RequestParam("symbols") String[] symbols);
 
   @GetMapping("/stock/{symbols}/chart/date/{tp}?token=pk_4e957a4821324131ae5619df8c683985&chartByDay=true")
-  List<IexHistoricalPrice> getHistoricalPrice(@PathVariable("symbols") String symbols, @PathVariable("tp") String tp);
+  Object getHistoricalPrice(@PathVariable("symbols") String symbols, @PathVariable("tp") String tp);
 
 }

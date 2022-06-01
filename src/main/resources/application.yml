@@ -16,6 +16,7 @@ spring:
          ddl-auto: update
       database-platform: org.hibernate.dialect.MySQL5Dialect
 
+
 mvc:
    settleMissionPath: /settlementEngine
    updateMissionPath: /settlementEngine/mission/
@@ -61,6 +62,10 @@ spring:
       iexBasePath: https://cloud.iexapis.com/stable
 #      iexBasePath: https://api.iextrading.com/1.0
 # set debug to get spring to log the classpath (and other things) on startup
+   h2:
+      console:
+         enabled: true
+         path: /h2-console
 debug: true
 
 ---

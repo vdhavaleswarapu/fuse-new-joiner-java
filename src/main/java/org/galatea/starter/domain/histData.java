@@ -2,6 +2,7 @@ package org.galatea.starter.domain;
 
 import io.swagger.models.auth.In;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -35,6 +36,8 @@ public class histData {
     this.open = open;
     this.volume = volume;
   }
+
+  public histData(Object iexData) {}
 
   public Long getId(){ return id;}
   public String getSymbol(){ return symbol;}

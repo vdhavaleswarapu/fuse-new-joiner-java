@@ -5,8 +5,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-//@Repository
-public interface histDataRepo extends CrudRepository<IexHistoricalPrice, Long >{
+@Repository
+public interface histDataRepo extends CrudRepository<histData, Long >{
 
   List<histData> findBySymbol(String symbol);
   List<histData> findByDate(String date);

@@ -1,8 +1,8 @@
 package org.galatea.starter.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +11,8 @@ import org.galatea.starter.domain.IexLastTradedPrice;
 import org.galatea.starter.domain.IexSymbol;
 import org.galatea.starter.domain.histData;
 import org.galatea.starter.domain.histDataRepo;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -48,17 +50,24 @@ public class IexService {
       return iexClient.getLastTradedPriceForSymbols(symbols.toArray(new String[0]));
     }
   }
-  public List<IexHistoricalPrice> getHistoricalPrice(final String symbols, final String tp){
-
-    //add DB logic here to check if data exists in the DB and return it here as appropriate
-//    if(srch.size()==1) return (List<IexHistoricalPrice>)srch;
+  public Object getHistoricalPrice(final String symbols, final String tp, histDataRepo repo){
     if(symbols.isEmpty() || tp.isEmpty()) {
       return Collections.emptyList();
-    } else {
-      var response = iexClient.getHistoricalPrice(symbols, tp);
-      histDataRepo.save(response); //check why non-static
-      return response;
+    }
+    List<histData> result = new ArrayList<>();
+    repo.findBySymbol(symbols).forEach(i-> repo.findByDate(tp).forEach(j-> result.add(j)));
+    System.out.println(result);
+
+    if(!result.isEmpty()){
+      System.out.println("Data available locally ... ");
+      return result;
+    }
+    else {
+      System.out.println("Data not available locally. Querying the IEX API for data ...");
+      var data= iexClient.getHistoricalPrice(symbols, tp);
+      repo.save(new histData(data));
+      System.out.println("Data saved to in-memory DB");
+      return data;
     }
   }
-
 }

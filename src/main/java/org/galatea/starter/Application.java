@@ -1,5 +1,9 @@
 package org.galatea.starter;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.Entity;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +21,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -27,6 +33,7 @@ import org.springframework.data.jpa.repository.Query;
 @RequiredArgsConstructor
 @Slf4j
 @SpringBootApplication
+@EntityScan("org.galatea.starter.domain.histData")
 public class Application implements ApplicationRunner {
 
   /**
@@ -42,17 +49,6 @@ public class Application implements ApplicationRunner {
     SpringApplication.run(Application.class, args);
   }
 
-  @Bean
-  public CommandLineRunner push(histDataRepo repository){
-
-
-    return (args) -> {
-      repository.save(new histData("FB","2022-05-02" , 211.13, 211.18, 200.99, 201.165, 49915289));
-      System.out.println("written to DB");
-//      repository.findBySymbol("FB").forEach(i-> repository.findByDate("2022-05-02").forEach(j-> log.info(j.toString())));
-//      };
-    };
-  };
 
   /**
    * Ensure that server port is passed in as a command line argument.
