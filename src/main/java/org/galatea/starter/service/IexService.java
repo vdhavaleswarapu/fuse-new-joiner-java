@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.galatea.starter.domain.histData;
 import org.galatea.starter.domain.histDataRepo;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.util.Optionals;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -58,9 +60,10 @@ public class IexService {
     }
     List<IexHistoricalPrice> dummy = new ArrayList<>();
     List<histData> result = new ArrayList<>();
-    repo.findBySymbol(symbols).forEach(i-> repo.findByDate(tp).forEach(j-> result.add(j)));
-//    List<histData> result = repo.findByDataExists(symbols,tp);
-    System.out.println(result);
+
+    String convDate = tp.substring(0,4)+"-"+tp.substring(4,6)+"-"+tp.substring(6);
+
+    repo.findBySymbol(symbols.toUpperCase()).forEach(i-> repo.findByDate(convDate).forEach(j-> result.add(j)));
 
     if(!result.isEmpty()){
       System.out.println("Data available locally ... ");

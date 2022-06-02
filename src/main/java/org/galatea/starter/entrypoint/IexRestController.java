@@ -57,7 +57,7 @@ public class IexRestController {
   public List<IexHistoricalPrice> getHistoricalPrice(@RequestParam(value="symbols") final String symbols, @RequestParam(value = "tp") final String tp
       ){
     // Data not available locally. Pulling it from cloud.iex by calling the IEX API and simultaneously writing it to the DB.
-    List<IexHistoricalPrice> response = iexService.getHistoricalPrice(symbols,tp, repo);
-    return response;
+
+    return iexService.getHistoricalPrice(symbols,tp, repo);
   }
 }
