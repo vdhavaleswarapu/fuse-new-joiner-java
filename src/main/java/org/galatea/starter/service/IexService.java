@@ -1,6 +1,7 @@
 package org.galatea.starter.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import lombok.NonNull;
@@ -15,6 +16,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * A layer for transformation, aggregation, and business required when retrieving data from IEX.
@@ -57,18 +59,47 @@ public class IexService {
     List<IexHistoricalPrice> dummy = new ArrayList<>();
     List<histData> result = new ArrayList<>();
     repo.findBySymbol(symbols).forEach(i-> repo.findByDate(tp).forEach(j-> result.add(j)));
+//    List<histData> result = repo.findByDataExists(symbols,tp);
     System.out.println(result);
 
     if(!result.isEmpty()){
       System.out.println("Data available locally ... ");
+      System.out.println(result);
       return dummy;
     }
     else {
       System.out.println("Data not available locally. Querying the IEX API for data ...");
       var data= iexClient.getHistoricalPrice(symbols, tp);
-      repo.save(new histData(data));
+      String row = data.toString();
+
+      double close = Double.parseDouble(helperFunctionIEXData(row, "close="));
+      double high = Double.parseDouble(helperFunctionIEXData(row, "high="));
+      double open = Double.parseDouble(helperFunctionIEXData(row, "open="));
+      double low = Double.parseDouble(helperFunctionIEXData(row, "low="));
+      long volume = Long.parseLong(helperFunctionIEXData(row, "volume="));
+      String symbol = helperFunctionIEXData(row, "symbol=");
+      String date = helperFunctionIEXDate(row, "date=");
+
+      repo.save(new histData(symbol, date, close, high, low, open, volume));
       System.out.println("Data saved to in-memory DB");
       return data;
     }
   }
+
+  public String helperFunctionIEXData(String data, String fieldName){
+    String fieldVal = data.substring(data.indexOf(fieldName)+1);
+    fieldVal = fieldVal.substring(0, fieldVal.indexOf(","));
+    fieldVal = fieldVal.substring(fieldVal.indexOf("=")+1);
+
+    return fieldVal;
+  }
+
+  public String helperFunctionIEXDate(String data, String fieldName){
+    String fieldVal = data.substring(data.indexOf(fieldName)+1);
+    fieldVal = fieldVal.substring(0, fieldVal.indexOf(")"));
+    fieldVal = fieldVal.substring(fieldVal.indexOf("=")+1);
+
+    return fieldVal;
+  }
+
 }

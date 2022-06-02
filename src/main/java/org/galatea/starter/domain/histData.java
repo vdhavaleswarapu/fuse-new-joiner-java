@@ -22,12 +22,12 @@ public class histData {
   private Double low;
   private Double open;
   private String symbol;
-  private Integer volume;
+  private Long volume;
   private String date;
 
   protected histData() {}
 
-  public histData(String symbol, String date, Double close, Double high, Double low, Double open, Integer volume){
+  public histData(String symbol, String date, Double close, Double high, Double low, Double open, Long volume){
     this.symbol = symbol;
     this.date = date;
     this.close = close;
@@ -46,7 +46,7 @@ public class histData {
   public Double getHigh(){ return high;}
   public Double getLow(){ return low;}
   public Double getOpen(){ return open;}
-  public Integer getVolume(){ return volume;}
+  public Long getVolume(){ return volume;}
 
   @Override
   public String toString(){

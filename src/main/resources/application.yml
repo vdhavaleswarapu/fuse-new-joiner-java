@@ -57,6 +57,8 @@ spring:
    datasource:
       username: sa
       password:
+      platform: h2
+      url: jdbc:h2:mem:iexdata
    rest:
 #     revert changes if necessary
       iexBasePath: https://cloud.iexapis.com/stable
