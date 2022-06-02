@@ -37,7 +37,6 @@ public class histData {
     this.volume = volume;
   }
 
-  public histData(Object iexData) {}
 
   public Long getId(){ return id;}
   public String getSymbol(){ return symbol;}

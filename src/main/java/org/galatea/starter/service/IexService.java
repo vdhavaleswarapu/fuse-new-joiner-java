@@ -68,6 +68,7 @@ public class IexService {
     if(!result.isEmpty()){
       System.out.println("Data available locally ... ");
       System.out.println(result);
+      result.clear();
       return dummy;
     }
     else {
