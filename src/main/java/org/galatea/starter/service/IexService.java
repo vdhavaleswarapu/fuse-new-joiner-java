@@ -58,17 +58,16 @@ public class IexService {
     if(symbols.isEmpty() || tp.isEmpty()) {
       return Collections.emptyList();
     }
-    List<IexHistoricalPrice> dummy = new ArrayList<>();
+    List<IexHistoricalPrice> dummy = new ArrayList<>(); //returning dummy because of incosistent return type. Needs fixing.
     List<histData> result = new ArrayList<>();
 
     String convDate = tp.substring(0,4)+"-"+tp.substring(4,6)+"-"+tp.substring(6);
 
-    repo.findBySymbol(symbols.toUpperCase()).forEach(i-> repo.findByDate(convDate).forEach(j-> result.add(j)));
+    repo.findBySymbolAndDate(symbols.toUpperCase(), convDate).forEach(i->  result.add(i));
 
     if(!result.isEmpty()){
       System.out.println("Data available locally ... ");
-      System.out.println(result);
-      result.clear();
+      System.out.println(result); //Currently only printing data to the console and not actually returning it. Needs fixing.
       return dummy;
     }
     else {
