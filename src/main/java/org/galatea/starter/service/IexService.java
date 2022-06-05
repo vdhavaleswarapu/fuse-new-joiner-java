@@ -58,51 +58,26 @@ public class IexService {
     if(symbols.isEmpty() || tp.isEmpty()) {
       return Collections.emptyList();
     }
-    List<IexHistoricalPrice> dummy = new ArrayList<>(); //returning dummy because of incosistent return type. Needs fixing.
     List<histData> result = new ArrayList<>();
 
     String convDate = tp.substring(0,4)+"-"+tp.substring(4,6)+"-"+tp.substring(6);
 
     repo.findBySymbolAndDate(symbols.toUpperCase(), convDate).forEach(i->  result.add(i));
+    List <IexHistoricalPrice> localData = (List<IexHistoricalPrice>)(Object)result;
 
     if(!result.isEmpty()){
       System.out.println("Data available locally ... ");
-      System.out.println(result); //Currently only printing data to the console and not actually returning it. Needs fixing.
-      return dummy;
+      System.out.println(localData); 
+      return localData;
     }
     else {
       System.out.println("Data not available locally. Querying the IEX API for data ...");
-      var data= iexClient.getHistoricalPrice(symbols, tp);
-      String row = data.toString();
+      List<IexHistoricalPrice> iexData = iexClient.getHistoricalPrice(symbols, tp);
+      var data= iexData.get(0);
 
-      double close = Double.parseDouble(helperFunctionIEXData(row, "close="));
-      double high = Double.parseDouble(helperFunctionIEXData(row, "high="));
-      double open = Double.parseDouble(helperFunctionIEXData(row, "open="));
-      double low = Double.parseDouble(helperFunctionIEXData(row, "low="));
-      long volume = Long.parseLong(helperFunctionIEXData(row, "volume="));
-      String symbol = helperFunctionIEXData(row, "symbol=");
-      String date = helperFunctionIEXDate(row, "date=");
-
-      repo.save(new histData(symbol, date, close, high, low, open, volume));
+      repo.save(new histData(data.getSymbol(), data.getDate(), data.getClose(), data.getHigh(), data.getLow(), data.getOpen(), data.getVolume()));
       System.out.println("Data saved to in-memory DB");
-      return data;
+      return iexData;
     }
   }
-
-  public String helperFunctionIEXData(String data, String fieldName){
-    String fieldVal = data.substring(data.indexOf(fieldName)+1);
-    fieldVal = fieldVal.substring(0, fieldVal.indexOf(","));
-    fieldVal = fieldVal.substring(fieldVal.indexOf("=")+1);
-
-    return fieldVal;
   }
-
-  public String helperFunctionIEXDate(String data, String fieldName){
-    String fieldVal = data.substring(data.indexOf(fieldName)+1);
-    fieldVal = fieldVal.substring(0, fieldVal.indexOf(")"));
-    fieldVal = fieldVal.substring(fieldVal.indexOf("=")+1);
-
-    return fieldVal;
-  }
-
-}

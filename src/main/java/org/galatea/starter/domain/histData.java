@@ -17,17 +17,17 @@ public class histData {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
-  private Double close;
-  private Double high;
-  private Double low;
-  private Double open;
+  private BigDecimal close;
+  private BigDecimal high;
+  private BigDecimal low;
+  private BigDecimal open;
   private String symbol;
-  private Long volume;
+  private Integer volume;
   private String date;
 
   protected histData() {}
 
-  public histData(String symbol, String date, Double close, Double high, Double low, Double open, Long volume){
+  public histData(String symbol, String date, BigDecimal close, BigDecimal high, BigDecimal low, BigDecimal open, Integer volume){
     this.symbol = symbol;
     this.date = date;
     this.close = close;
@@ -41,11 +41,11 @@ public class histData {
   public Long getId(){ return id;}
   public String getSymbol(){ return symbol;}
   public String getDate(){ return date;}
-  public Double getClose(){ return close;}
-  public Double getHigh(){ return high;}
-  public Double getLow(){ return low;}
-  public Double getOpen(){ return open;}
-  public Long getVolume(){ return volume;}
+  public BigDecimal getClose(){ return close;}
+  public BigDecimal getHigh(){ return high;}
+  public BigDecimal getLow(){ return low;}
+  public BigDecimal getOpen(){ return open;}
+  public Integer getVolume(){ return volume;}
 
   @Override
   public String toString(){
