@@ -4,15 +4,10 @@ import java.util.List;
 import org.galatea.starter.domain.IexHistoricalPrice;
 import org.galatea.starter.domain.IexLastTradedPrice;
 import org.galatea.starter.domain.IexSymbol;
-import org.galatea.starter.domain.histData;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * A Feign Declarative REST Client to access endpoints from the Free and Open IEX API to get market
@@ -27,11 +22,13 @@ public interface IexClient {
    *
    * @return a list of all of the stock symbols supported by IEX.
    */
-  @GetMapping("/ref-data/symbols?token=pk_4e957a4821324131ae5619df8c683985") //hardcoded private token to the mappings
+  @GetMapping("/ref-data/symbols?token=pk_4e957a4821324131ae5619df8c683985")
+  //hardcoded private token to the mappings
   List<IexSymbol> getAllSymbols();
 
   /**
-   * Get the last traded price for each stock symbol passed in. See https://iextrading.com/developer/docs/#last.
+   * Get the last traded price for each stock symbol passed in. See
+   * https://iextrading.com/developer/docs/#last.
    *
    * @param symbols stock symbols to get last traded price for.
    * @return a list of the last traded price for each of the symbols passed in.
@@ -39,7 +36,16 @@ public interface IexClient {
   @GetMapping("/tops/last?token=pk_4e957a4821324131ae5619df8c683985")
   List<IexLastTradedPrice> getLastTradedPriceForSymbols(@RequestParam("symbols") String[] symbols);
 
-  @GetMapping("/stock/{symbols}/chart/date/{tp}?token=pk_4e957a4821324131ae5619df8c683985&chartByDay=true")
-  List<IexHistoricalPrice> getHistoricalPrice(@PathVariable("symbols") String symbols, @PathVariable("tp") String tp);
+  /**
+   * Get the historical price of a stock on a selected date.
+   *
+   * @param symbols Stock symbol to get historical price data for.
+   * @param timePeriod Date on which the historical price for a stock is to be pulled.
+   * @return The high, low, open, close, volume of the selected stock on the selected date.
+   */
+  @GetMapping(
+      "/stock/{symbols}/chart/date/{timePeriod}?token=pk_4e957a4821324131ae5619df8c683985&chartByDay=true")
+  List<IexHistoricalPrice> getHistoricalPrice(@PathVariable("symbols") String symbols,
+      @PathVariable("timePeriod") String timePeriod);
 
 }

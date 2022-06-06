@@ -1,10 +1,8 @@
 package org.galatea.starter.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,12 +11,8 @@ import org.galatea.starter.domain.IexLastTradedPrice;
 import org.galatea.starter.domain.IexSymbol;
 import org.galatea.starter.domain.histData;
 import org.galatea.starter.domain.histDataRepo;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.util.Optionals;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 /**
  * A layer for transformation, aggregation, and business required when retrieving data from IEX.
@@ -54,30 +48,40 @@ public class IexService {
       return iexClient.getLastTradedPriceForSymbols(symbols.toArray(new String[0]));
     }
   }
-  public List<IexHistoricalPrice> getHistoricalPrice(final String symbols, final String tp, histDataRepo repo){
-    if(symbols.isEmpty() || tp.isEmpty()) {
+
+  /**
+   * Get the historical data of a stock on a selected date
+   *
+   * @param symbols symbol of the stock.
+   * @param timePeriod date for which the stock data is requested.
+   * @param repo H2 repository which will store any new data queried from IEX.
+   * @return List of historical price data for selected stock on selected date.
+   */
+  public List<IexHistoricalPrice> getHistoricalPrice(final String symbols, final String timePeriod,
+      histDataRepo repo) {
+    if (symbols.isEmpty() || timePeriod.isEmpty()) {
       return Collections.emptyList();
     }
     List<histData> result = new ArrayList<>();
 
-    String convDate = tp.substring(0,4)+"-"+tp.substring(4,6)+"-"+tp.substring(6);
+    String convDate = timePeriod.substring(0, 4) + "-" + timePeriod.substring(4, 6) + "-" + timePeriod.substring(6);
 
-    repo.findBySymbolAndDate(symbols.toUpperCase(), convDate).forEach(i->  result.add(i));
-    List <IexHistoricalPrice> localData = (List<IexHistoricalPrice>)(Object)result;
+    repo.findBySymbolAndDate(symbols.toUpperCase(), convDate).forEach(i -> result.add(i));
+    List<IexHistoricalPrice> localData = (List<IexHistoricalPrice>) (Object) result;
 
-    if(!result.isEmpty()){
+    if (!result.isEmpty()) {
       System.out.println("Data available locally ... ");
-      System.out.println(localData); 
+      System.out.println(localData);
       return localData;
-    }
-    else {
+    } else {
       System.out.println("Data not available locally. Querying the IEX API for data ...");
-      List<IexHistoricalPrice> iexData = iexClient.getHistoricalPrice(symbols, tp);
-      var data= iexData.get(0);
+      List<IexHistoricalPrice> iexData = iexClient.getHistoricalPrice(symbols, timePeriod);
+      var data = iexData.get(0);
 
-      repo.save(new histData(data.getSymbol(), data.getDate(), data.getClose(), data.getHigh(), data.getLow(), data.getOpen(), data.getVolume()));
+      repo.save(new histData(data.getSymbol(), data.getDate(), data.getClose(), data.getHigh(),
+          data.getLow(), data.getOpen(), data.getVolume()));
       System.out.println("Data saved to in-memory DB");
       return iexData;
     }
   }
-  }
+}

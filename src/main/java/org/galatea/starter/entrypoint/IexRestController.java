@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
+import org.galatea.starter.domain.IexHistoricalPrice;
 import org.galatea.starter.domain.IexLastTradedPrice;
 import org.galatea.starter.domain.IexSymbol;
 import org.galatea.starter.domain.histDataRepo;
 import org.galatea.starter.service.IexService;
-import org.galatea.starter.domain.IexHistoricalPrice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -27,7 +27,7 @@ public class IexRestController {
 
   @NonNull
   private IexService iexService;
-  
+
   /**
    * Exposes an endpoint to get all of the symbols available on IEX.
    *
@@ -53,11 +53,20 @@ public class IexRestController {
 
   @Autowired
   histDataRepo repo;
-  @GetMapping(value = "${mvc.iex.getHistoricalPricePath}", produces = {MediaType.APPLICATION_JSON_VALUE})
-  public List<IexHistoricalPrice> getHistoricalPrice(@RequestParam(value="symbols") final String symbols, @RequestParam(value = "tp") final String tp
-      ){
-    // Data not available locally. Pulling it from cloud.iex by calling the IEX API and simultaneously writing it to the DB.
 
-    return iexService.getHistoricalPrice(symbols,tp, repo);
+  /**
+   * @param symbols Symbol to get the historical price data for.
+   * @param timePeriod Specify the time-period/date on which we need the historical data.
+   * @return The high, low, open, close, volume of the selected stock on the selected date.
+   */
+  @GetMapping(value = "${mvc.iex.getHistoricalPricePath}",
+      produces = {MediaType.APPLICATION_JSON_VALUE})
+  public List<IexHistoricalPrice> getHistoricalPrice(
+      @RequestParam(value = "symbols") final String symbols,
+      @RequestParam(value = "timePeriod") final String timePeriod
+  ) {
+    // Data not available locally. Pulling it from cloud.iex by calling the IEX API
+    // and simultaneously writing it to the DB.
+    return iexService.getHistoricalPrice(symbols, timePeriod, repo);
   }
 }
