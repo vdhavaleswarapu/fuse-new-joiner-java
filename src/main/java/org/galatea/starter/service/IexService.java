@@ -61,6 +61,7 @@ public class IexService {
   public List<IexHistoricalPrice> getHistoricalPrice(final String symbols, final String timePeriod, final String token,
       histDataRepo repo) {
     if (symbols.isEmpty() || timePeriod.isEmpty()) {
+      if(token.isEmpty()) System.out.println("No token passed");
       return Collections.emptyList();
     }
     List<histData> result = new ArrayList<>();

@@ -87,7 +87,8 @@ public class IexRestControllerTest extends ASpringTest {
 
     MvcResult result = this.mvc.perform(
             org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-                .get("/iex/historicalPrice?symbols=FB&tp=20220502")
+                .get("/iex/historicalPrice?symbols=FB&timePeriod=20220502"
+                    + "&token=pk_4e957a4821324131ae5619df8c683985")
                 // This URL will be hit by the MockMvc client. The result is configured in the file
                 // src/test/resources/wiremock/mappings/mapping-lastTradedPrice.json
                 .accept(MediaType.APPLICATION_JSON_VALUE))
@@ -107,7 +108,7 @@ public class IexRestControllerTest extends ASpringTest {
 
     MvcResult result = this.mvc.perform(
             org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-                .get("/iex/historicalPrice?symbols=FB&tp=")
+                .get("/iex/historicalPrice?symbols=FB&timePeriod=&token=")
                 .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", is(Collections.emptyList())))
