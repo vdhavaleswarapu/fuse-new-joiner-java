@@ -7,6 +7,9 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 
 /**
@@ -15,6 +18,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @RequiredArgsConstructor
 @Slf4j
 @SpringBootApplication
+//@EntityScan("org.galatea.starter.domain.histData")
 public class Application implements ApplicationRunner {
 
   /**
@@ -22,11 +26,14 @@ public class Application implements ApplicationRunner {
    *
    * @param args command line args
    */
+
+  private static final Logger log = LoggerFactory.getLogger(Application.class);
   public static void main(final String[] args) {
+
     log.info("Starting spring application {}", System.getProperty("application.name"));
     SpringApplication.run(Application.class, args);
-
   }
+
 
   /**
    * Ensure that server port is passed in as a command line argument.

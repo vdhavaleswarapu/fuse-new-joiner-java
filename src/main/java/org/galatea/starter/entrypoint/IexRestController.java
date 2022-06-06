@@ -6,9 +6,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
+import org.galatea.starter.domain.IexHistoricalPrice;
 import org.galatea.starter.domain.IexLastTradedPrice;
 import org.galatea.starter.domain.IexSymbol;
+import org.galatea.starter.domain.histDataRepo;
 import org.galatea.starter.service.IexService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +34,10 @@ public class IexRestController {
    * @return a list of all IexStockSymbols.
    */
   @GetMapping(value = "${mvc.iex.getAllSymbolsPath}", produces = {MediaType.APPLICATION_JSON_VALUE})
-  public List<IexSymbol> getAllStockSymbols() {
-    return iexService.getAllSymbols();
+  public List<IexSymbol> getAllStockSymbols(
+      @RequestParam(value="token") final String token
+  ) {
+    return iexService.getAllSymbols(token);
   }
 
   /**
@@ -44,8 +49,28 @@ public class IexRestController {
   @GetMapping(value = "${mvc.iex.getLastTradedPricePath}", produces = {
       MediaType.APPLICATION_JSON_VALUE})
   public List<IexLastTradedPrice> getLastTradedPrice(
-      @RequestParam(value = "symbols") final List<String> symbols) {
-    return iexService.getLastTradedPriceForSymbols(symbols);
+      @RequestParam(value = "symbols") final String symbols,
+      @RequestParam(value = "token") final String token) {
+    return iexService.getLastTradedPriceForSymbols(symbols, token);
   }
 
+  @Autowired
+  histDataRepo repo;
+
+  /**
+   * @param symbols Symbol to get the historical price data for.
+   * @param timePeriod Specify the time-period/date on which we need the historical data.
+   * @return The high, low, open, close, volume of the selected stock on the selected date.
+   */
+  @GetMapping(value = "${mvc.iex.getHistoricalPricePath}",
+      produces = {MediaType.APPLICATION_JSON_VALUE})
+  public List<IexHistoricalPrice> getHistoricalPrice(
+      @RequestParam(value = "symbols") final String symbols,
+      @RequestParam(value = "timePeriod") final String timePeriod,
+      @RequestParam(value="token") final String token
+  ) {
+    // Data not available locally. Pulling it from cloud.iex by calling the IEX API
+    // and simultaneously writing it to the DB.
+    return iexService.getHistoricalPrice(symbols, timePeriod, token, repo);
+  }
 }

@@ -16,6 +16,7 @@ spring:
          ddl-auto: update
       database-platform: org.hibernate.dialect.MySQL5Dialect
 
+
 mvc:
    settleMissionPath: /settlementEngine
    updateMissionPath: /settlementEngine/mission/
@@ -25,6 +26,7 @@ mvc:
    iex:
       getAllSymbolsPath: /iex/symbols
       getLastTradedPricePath: /iex/lastTradedPrice
+      getHistoricalPricePath: /iex/historicalPrice
    max-size-trace-payload: 50000
 jms:
    listener-concurrency: 1-5
@@ -55,9 +57,17 @@ spring:
    datasource:
       username: sa
       password:
+      platform: h2
+      url: jdbc:h2:mem:iexdata
    rest:
-      iexBasePath: https://api.iextrading.com/1.0
+#     revert changes if necessary
+      iexBasePath: https://cloud.iexapis.com/stable
+#      iexBasePath: https://api.iextrading.com/1.0
 # set debug to get spring to log the classpath (and other things) on startup
+   h2:
+      console:
+         enabled: true
+         path: /h2-console
 debug: true
 
 ---
