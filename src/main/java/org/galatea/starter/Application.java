@@ -1,18 +1,7 @@
 package org.galatea.starter;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.Entity;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.galatea.starter.domain.IexHistoricalPrice;
-import org.galatea.starter.domain.histData;
-import org.galatea.starter.domain.histDataRepo;
-import org.galatea.starter.entrypoint.IexRestController;
-import org.galatea.starter.service.IexClient;
-import org.galatea.starter.service.IexService;
 import org.galatea.starter.utils.exception.MissingOptionException;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -20,11 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 /**
